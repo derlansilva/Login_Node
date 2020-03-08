@@ -7,7 +7,9 @@ const app = express()
 app.use(express.json())
 
 mongoose.connect('mongodb://localhost:27017/nodeapi' , {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true 
 });
 
 requireDir('./src/models');
