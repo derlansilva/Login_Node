@@ -12,7 +12,7 @@ mongoose.connect('mongodb://localhost:27017/nodeapi' , {
     useUnifiedTopology: true 
 });
 
-requireDir('./src/models');
+requireDir('./src/app/models');
 
 app.use("/api" , require("./src/routes"));
 
