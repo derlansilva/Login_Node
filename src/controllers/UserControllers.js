@@ -1,5 +1,8 @@
 const express = require("express");
 const User = require("../models/User");
+const bcript = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const auth = require("../config/Auth")
 
 module.exports={
 
@@ -16,19 +19,30 @@ module.exports={
     },
 
     async login(req , res){
-        try {
-            const { email , password} =  req.body 
+        const { email , password } = req.body;
+        
+        const user = await User.findOne({ email}).select('+password');
 
-            const user = await User.findByCredentials(email , password);
-            if(!user){
-                return res.status(401).send({ error : 'Login failed ! Check authentication credentials'})
-                
-            }
-            const token = await user.generateAuthToken()
+        if(!user)
+            return res.status(400).send({error : "User not found"});
 
-            res.send({user, token})
-        } catch (error) {
-            res.status(400).send(error)
-        }
+        if(!await bcript.compare(password , user.password))
+            return res.status(400).send({error : "Invalid password"});
+
+
+        user.password = undefined;
+
+        const token = jwt.sign({ id : user.id } , auth.secret , {
+            expiresIn : 86400
+        })
+
+        res.send({
+            user , 
+            token
+        });
+    },
+
+    async toke(req , res){
+        res.send({ok : true , user : req.userId})
     }
 }
