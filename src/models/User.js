@@ -61,7 +61,7 @@ UserSchema.statics.finfByCredentials = async (email , password )=>{
     }
     const isPassWordMatch = await bcript.compare(password ,user.password);
     if(!isPassWordMatch){
-        console.log("Login existente")
+        throw new Error({error : "invalid login"})
     }
 
     return user;
