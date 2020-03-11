@@ -2,7 +2,8 @@ const express = require("express");
 const User = require("../models/User");
 const bcript = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const auth = require("../../config/Auth")
+const auth = require("../../config/auth")
+
 
 module.exports={
 
@@ -44,5 +45,6 @@ module.exports={
 
     async toke(req , res){
         res.send({ok : true , user : req.userId})
-    }
+    },
+
 }
